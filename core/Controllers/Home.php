@@ -3,13 +3,14 @@
 namespace Controllers;
 
 class Home extends AbstractController
-
 {
+
+    protected $defaultModelName = \Models\Home::class ;
+
 
     /**
      * 
      * affiche l'accueil
-     * 
      * 
      * pour déclencher un appel à cette methode, le Kernel est conçu pour surveiller
      * deux parametres dans l'url :   'type'  et 'action' pour le controller et la methode
@@ -21,11 +22,8 @@ class Home extends AbstractController
      * 
      * 
      */
-
-
-    protected $defaultModelName = \Models\Home::class;
-
-    public function index() {
+    public function index()
+    {
         
         // si besoin d'interagir avec la BDD, on peut utiliser le modele par defaut
         //du controller, et donc faire une requete sur sa table SQL par defaut
@@ -43,12 +41,9 @@ class Home extends AbstractController
         //sera disponible dans ce template
 
 
-
-        return $this->render("home/index", ["pageTitle" => "Home Page", 
+        return $this->render("home/index", [
+            "pageTitle"=> "Home Page",
         // "elements" => $elements
-    ]);
+        ]);
     }
-
 }
-
-?>

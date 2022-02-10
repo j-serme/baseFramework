@@ -6,16 +6,13 @@ namespace App;
 class Kernel
 {
 
-    /**
-     * renseigner les propriétés $type et $action en chaine de caractère pour 
-     * se retrouver sur la page d'accueil.
-     * 
-     */
-
     public static function run()
     {
-        $type = "home";
-        $action = "index";
+
+//ces deux variables peuvent etre utilisées pour fixer la page d'accueil par défaut
+
+        $type = 'home';
+        $action = 'index';
 
         if(!empty($_GET['type'])) {$type = $_GET["type"];}
         if(!empty($_GET['action'])){ $action = $_GET["action"];}

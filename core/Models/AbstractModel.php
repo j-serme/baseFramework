@@ -1,64 +1,29 @@
 <?php
-
 namespace Models;
 
-// Require_once pour appeler la méthode getPdo() pour se connecter à la BDD 
-// afin que les modèles héritent des méthodes findById(), findAll() et remove().
 
-require_once "core/Database/PdoMySQL.php";
 
 abstract class AbstractModel
 {
 
     protected string $nomDeLaTable;
 
+
     protected $pdo;
 
     public function __construct()
     {
 
-        $this->pdo = \Database\PdoMySql::getPdo();
+
+        $this->pdo = \Database\PdoMySQL::getPdo();
+
+      
     }
 
     /**
      * 
-     * trouver un element par son id
-     * renvoie un tableau contenant un element
-     * 
-     * @param integer $id
-     * @return array|bool
-     * 
-     */
-    public function findById(int $id)
-    {
-
-        // cette méthode permet de retourner un tableau d'un élèment d'une table
-        // grâce à son ID
-
-
-        $maRequete = $this->pdo->prepare("SELECT * 
-                        FROM {$this->nomDeLaTable} WHERE id = :id");
-
-        $maRequete->execute(
-            [
-                "id" => $id
-            ]
-
-        );
-
-        $maRequete->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
-
-
-        $element = $maRequete->fetch();
-
-        return $element;
-    }
-
-
-
-    /**
-     * 
-     * retourne un tableau contenant TOUS les elements
+     * retourne un tableau contenant TOUS les elements 
+     * tous les champs de la table SQL en question
      * 
      * @return array $elements
      * 
@@ -76,16 +41,50 @@ abstract class AbstractModel
         return $elements;
     }
 
+
+
+
     /**
-     * Supprime de la base de données un element grâce à son ID
      * 
+     * trouver un element par son id
+     * renvoie un tableau contenant un element
      * 
      * @param integer $id
-     * @return void
+     * @return array|bool
      * 
      */
+    public function findById(int $id)
+    {
 
-    public function remove(int $id): void
+
+        $maRequete = $this->pdo->prepare("SELECT * 
+                        FROM {$this->nomDeLaTable} WHERE id = :id");
+
+        $maRequete->execute(
+            [
+                "id" => $id
+            ]
+
+        );
+
+        $maRequete->setFetchMode(\PDO::FETCH_CLASS, get_class($this));
+
+        $element = $maRequete->fetch();
+    
+        return $element;
+
+    }
+
+    /**
+     * 
+     * supprimer un element de la BDD par le biais de son id
+     * 
+     * @param object $objetDUneClasse
+     * @return void
+     * 
+     * 
+     */
+    public function remove($objetDUneClasse): void
     {
 
 
@@ -93,32 +92,46 @@ abstract class AbstractModel
         $requeteSuppression = $this->pdo->prepare("DELETE FROM {$this->nomDeLaTable} WHERE id = :id");
 
         $requeteSuppression->execute([
-            "id" => $id
+            "id" => $objetDUneClasse->getId()
         ]);
     }
 
-    // /**
-    // * 
-    // * Ajoute un nouveau cocktail dans la BDD
-    // * 
-    // * @param Cocktail $cocktail
-    // * 
-    // * @return void
-    // * 
-    // */
 
-    // Déclarer des propriétés privées
-    // Mettre en place les getter et les setter de chacune des propriétés
-                            
-    // public function save(Cocktail $cocktail): void
-    // {
-        
-    //    $sql = $this->pdo->prepare("INSERT INTO {$this->nomDeLaTable}(name, image, ingredients) VALUES (:nom,:image,:ingredients)");
 
-    //    $sql->execute([
-    //        "nom" => $cocktail->name,
-    //        "image" => $cocktail->image,
-    //        "ingredients" => $cocktail->ingredients
-    //    ]);
-    // }
+
+
 }
+
+
+
+
+/* 
+
+    ajouter une page avec des infos
+            une info : 
+
+                    -id
+                    -description   (texte d'information)
+
+            -afficher toutes les infos
+            -supprimer une info
+            -creer une info    (formulaire sur template séparé)
+
+
+
+    ajouter les sandwiches
+
+            un sandwich : 
+                            -id
+                            -description   (texte)
+                            -prix int
+
+            -afficher tous les sandwiches
+            -afficher un sandwich
+            -supprimer un sandwich
+            -creer un sandwich
+
+
+
+
+*/
